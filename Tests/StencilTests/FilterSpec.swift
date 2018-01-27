@@ -219,6 +219,12 @@ func testFilter() {
       try expect(result) == "[\"anonymous\", \"Two\"]"
     }
 
+    $0.it("can map single value") {
+      let template = Template(templateString: "{{ value|map:\"user.name\"}}")
+      let result = try template.render(Context(dictionary: ["value": ["user": ["name": "Two"]]]))
+      try expect(result) == "Two"
+    }
+
   }
 
   describe("compact filter") {

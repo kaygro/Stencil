@@ -64,16 +64,21 @@ func mapFilter(value: Any?, arguments: [Any?], context: Context) throws -> Any? 
   let variable = Variable("map_item.\(attribute)")
   let defaultValue = arguments.count == 2 ? arguments[1] : nil
 
-  guard let array = value as? [Any] else { return value }
-
-  return try array.map({ (item) -> Any in
+  let resolveVariable = { (item: Any) throws -> Any in
     let result = try context.push(dictionary: ["map_item": item]) {
       try variable.resolve(context)
     }
     if let result = result { return result }
     else if let defaultValue = defaultValue { return defaultValue }
     else { return result as Any }
-  })
+  }
+
+
+  if let array = value as? [Any] {
+    return try array.map(resolveVariable)
+  } else {
+    return try resolveVariable(value as Any)
+  }
 }
 
 func compactFilter(value: Any?, arguments: [Any?], context: Context) throws -> Any? {
