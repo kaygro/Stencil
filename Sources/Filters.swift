@@ -107,9 +107,8 @@ func filterFilter(value: Any?, arguments: [Any?], context: Context) throws -> An
   }
 
   let attribute = stringify(arguments[0])
-  let token = Token.block(value: attribute)
-  let parser = TokenParser(tokens: [token], environment: context.environment)
-  let expr = try IfExpressionParser(components: token.components(), tokenParser: parser).parse()
+  let parser = TokenParser(tokens: [], environment: context.environment)
+  let expr = try parser.compileExpression(components: Token.block(value: attribute).components())
 
   if let array = value as? [Any] {
     return try array.filter {

@@ -8,7 +8,7 @@ class FilterExpression : Resolvable {
   let filters: [(FilterType, [Variable])]
   let variable: Variable
 
-  init(token: String, parser: TokenParser) throws {
+  init(token: String, environment: Environment) throws {
     let bits = token.smartSplit(separator: "|").map({ String($0).trim(character: " ") })
     if bits.isEmpty {
       filters = []
@@ -22,7 +22,7 @@ class FilterExpression : Resolvable {
     do {
       filters = try filterBits.map {
         let (name, arguments) = parseFilterComponents(token: $0)
-        let filter = try parser.findFilter(name)
+        let filter = try environment.findFilter(name)
         return (filter, arguments)
       }
     } catch {
