@@ -9,7 +9,7 @@ class FilterExpression : Resolvable {
   let variable: Variable
 
   init(token: String, parser: TokenParser) throws {
-    let bits = token.characters.split(separator: "|").map({ String($0).trim(character: " ") })
+    let bits = token.smartSplit(separator: "|").map({ String($0).trim(character: " ") })
     if bits.isEmpty {
       filters = []
       variable = Variable("")

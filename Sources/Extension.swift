@@ -64,6 +64,7 @@ class DefaultExtension: Extension {
     registerFilter("split", filter: splitFilter)
     registerFilter("map", filter: mapFilter)
     registerFilter("compact", filter: compactFilter)
+    registerFilter("filter", filter: filterFilter)
   }
 }
 

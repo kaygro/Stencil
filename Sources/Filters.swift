@@ -27,7 +27,7 @@ func defaultFilter(value: Any?, arguments: [Any?]) -> Any? {
 
 func joinFilter(value: Any?, arguments: [Any?]) throws -> Any? {
   guard arguments.count < 2 else {
-    throw TemplateSyntaxError("'join' filter takes a single argument")
+    throw TemplateSyntaxError("'join' filter takes at most one argument")
   }
 
   let separator = stringify(arguments.first ?? "")
@@ -43,7 +43,7 @@ func joinFilter(value: Any?, arguments: [Any?]) throws -> Any? {
 
 func splitFilter(value: Any?, arguments: [Any?]) throws -> Any? {
   guard arguments.count < 2 else {
-    throw TemplateSyntaxError("'split' filter takes a single argument")
+    throw TemplateSyntaxError("'split' filter takes at most one argument")
   }
 
   let separator = stringify(arguments.first ?? " ")
@@ -57,7 +57,7 @@ func splitFilter(value: Any?, arguments: [Any?]) throws -> Any? {
 
 func mapFilter(value: Any?, arguments: [Any?], context: Context) throws -> Any? {
   guard arguments.count >= 1 && arguments.count <= 2 else {
-    throw TemplateSyntaxError("'map' filter takes at most two arguments")
+    throw TemplateSyntaxError("'map' filter takes one or two arguments")
   }
 
   let attribute = stringify(arguments[0])
@@ -99,5 +99,26 @@ func compactFilter(value: Any?, arguments: [Any?], context: Context) throws -> A
     if let unwrapped = item, String(describing: unwrapped) != "nil" { return unwrapped }
     else { return nil }
   })
+}
+
+func filterFilter(value: Any?, arguments: [Any?], context: Context) throws -> Any? {
+  guard arguments.count == 1 else {
+    throw TemplateSyntaxError("'filter' filter takes one argument")
+  }
+
+  let attribute = stringify(arguments[0])
+  let token = Token.block(value: attribute)
+  let parser = TokenParser(tokens: [token], environment: context.environment)
+  let expr = try IfExpressionParser(components: token.components(), tokenParser: parser).parse()
+
+  if let array = value as? [Any] {
+    return try array.filter {
+      try context.push(dictionary: ["$0": $0]) {
+        try expr.evaluate(context: context)
+      }
+    }
+  }
+
+  return value
 }
 
