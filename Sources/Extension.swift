@@ -62,6 +62,7 @@ class DefaultExtension: Extension {
     registerFilter("lowercase", filter: lowercase)
     registerFilter("join", filter: joinFilter)
     registerFilter("split", filter: splitFilter)
+    registerFilter("indent", filter: indentFilter)
     registerFilter("map", filter: mapFilter)
     registerFilter("compact", filter: compactFilter)
     registerFilter("filter", filter: filterFilter)

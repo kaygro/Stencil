@@ -7,7 +7,9 @@
 - Added support for resolving superclass properties for not-NSObject subclasses
 - The `{% for %}` tag can now iterate over tuples, structures and classes via
   their stored properties.
-- Added `split`, `map`, `compact` and `filter` filters
+- Allow default string filters to be applied to arrays
+- Similar filters are suggested when unknown filter is used
+- Added `indent`, `split`, `map`, `compact` and `filter` filters
 
 ### Bug Fixes
 
