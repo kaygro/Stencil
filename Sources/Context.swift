@@ -28,6 +28,14 @@ public class Context {
 
     /// Set a variable in the current context, deleting the variable if it's nil
     set(value) {
+			for (level,dictionary) in dictionaries.enumerated().reversed(){
+				if let _ = dictionary[key]{
+					self.dictionaries[level].updateValue(value, forKey: key)
+					return
+				}
+			}
+			
+			
       if let dictionary = dictionaries.popLast() {
         var mutable_dictionary = dictionary
         mutable_dictionary[key] = value
